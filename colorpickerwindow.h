@@ -35,14 +35,14 @@ class ColorPickerWindow : public Gtk::Window
 
     public:
     ColorPickerWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
-    void set_app(Glib::RefPtr<Gtk::Application> _app);
-    void set_main_window(MainWindow* _mainWindow);
+    void SetApp(Glib::RefPtr<Gtk::Application> _app);
+    void SetMainWindow(MainWindow* _mainWindow);
+    void GetPixelFromPixbuf(double x, double y, Glib::RefPtr<Gdk::Pixbuf> pixbuf, unsigned char *pixels);
+
     void on_showed();
-    bool on_my_draw(const Cairo::RefPtr<Cairo::Context>& cr);
-    bool on_my_motion_notify_event(GdkEventMotion* motion_event);
     bool on_key_pressed(GdkEventKey* event);
     bool on_button_pressed(GdkEventButton* button_event);
-    bool on_scroll(GdkEventScroll* scroll_event);
-    void get_pixel_from_pixbuf(double x, double y, Glib::RefPtr<Gdk::Pixbuf> pixbuf, unsigned char *pixels);
-
+    bool on_my_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+    bool on_my_motion_notify_event(GdkEventMotion* motion_event);
+    bool on_scroll(GdkEventScroll* scroll_event);   
 };

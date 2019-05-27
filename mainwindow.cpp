@@ -38,8 +38,8 @@ void MainWindow::on_colorPickerButton_clicked()
     auto builder = Gtk::Builder::create_from_file("ColorPickerWindow.glade");
     ColorPickerWindow *colorPickerWindow;
     builder->get_widget_derived("ColorPickerWindow", colorPickerWindow);
-    colorPickerWindow->set_app(app);
-    colorPickerWindow->set_main_window(this);
+    colorPickerWindow->SetApp(app);
+    colorPickerWindow->SetMainWindow(this);
     this->app->hold();
     this->hide();
 
@@ -49,7 +49,13 @@ void MainWindow::on_colorPickerButton_clicked()
 void MainWindow::on_clipboardButton_clicked()
 {
 	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
-	// refClipboard->set_text("Hello");
+	refClipboard->set_text(color.GetHexString());
+
+    auto Notification = Gio::Notification::create(color.GetHexString());
+	Notification->set_body("Copied to clipboard.");
+	auto Icon = Gio::ThemedIcon::create("colorpicker");
+	Notification->set_icon (Icon);
+	app->send_notification(Notification);
 }
 
 void MainWindow::on_hidden()
@@ -57,14 +63,13 @@ void MainWindow::on_hidden()
     // std::cout << "Hidden" << std::endl;
 }
 
-void MainWindow::set_app(Glib::RefPtr<Gtk::Application> _app)
+void MainWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
 {
     this->app = _app;
 }
 
-void MainWindow::set_picked_color(Color pickedColor)
+void MainWindow::SetPickedColor(Color pickedColor)
 {
-    //color.set(r,g,b);
     color = pickedColor;
     colorArea->queue_draw();
     redScale->set_value(color.GetRed());

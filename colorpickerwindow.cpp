@@ -27,12 +27,12 @@ ColorPickerWindow::ColorPickerWindow(BaseObjectType* cobject, const Glib::RefPtr
     drawingArea->add_events(Gdk::KEY_PRESS_MASK | Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK);
 }
 
-void ColorPickerWindow::set_app(Glib::RefPtr<Gtk::Application> _app)
+void ColorPickerWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
 {
     this->app = _app;
 }
 
-void ColorPickerWindow::set_main_window(MainWindow* _mainWindow)
+void ColorPickerWindow::SetMainWindow(MainWindow* _mainWindow)
 {
     mainWindow = _mainWindow;
 }
@@ -151,7 +151,7 @@ bool ColorPickerWindow::on_my_motion_notify_event(GdkEventMotion* motion_event)
     x = motion_event->x_root;
     y = motion_event->y_root;
 
-    this->get_pixel_from_pixbuf(x, y, screenshot, screenshot->get_pixels());
+    this->GetPixelFromPixbuf(x, y, screenshot, screenshot->get_pixels());
     drawingArea->queue_draw();
 
     return true;
@@ -194,7 +194,7 @@ bool ColorPickerWindow::on_button_pressed(GdkEventButton* button_event)
     if(button_event->button == 1)
     {
       this->hide();
-      this->mainWindow->set_picked_color(color);
+      this->mainWindow->SetPickedColor(color);
       this->mainWindow->show();
     }
 
@@ -223,7 +223,7 @@ bool ColorPickerWindow::on_scroll(GdkEventScroll* scroll_event)
     return true;
 }
 
-void ColorPickerWindow::get_pixel_from_pixbuf(double x, double y, Glib::RefPtr<Gdk::Pixbuf> pixbuf, unsigned char *pixels)
+void ColorPickerWindow::GetPixelFromPixbuf(double x, double y, Glib::RefPtr<Gdk::Pixbuf> pixbuf, unsigned char *pixels)
 {
     guchar *p;
     p = pixels + ((int)y) * pixbuf->get_rowstride() + ((int)x) * pixbuf->get_n_channels();

@@ -21,11 +21,13 @@ class MainWindow : public Gtk::Window
 
     public:
     MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
+
+    void SetApp(Glib::RefPtr<Gtk::Application> _app);
+    void SetPickedColor(Color pickedColor);
+
+    void on_hidden();
     bool on_colorArea_draw(const Cairo::RefPtr<Cairo::Context>& cr);
     void on_exitButton_clicked();
     void on_colorPickerButton_clicked();
     void on_clipboardButton_clicked();
-    void on_hidden();
-    void set_app(Glib::RefPtr<Gtk::Application> _app);
-    void set_picked_color(Color pickedColor);
 };
