@@ -3,6 +3,7 @@
 #include <sstream>
 #include "colorpickerwindow.h"
 #include "color.h"
+#include <fstream>
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject)
 {
@@ -13,10 +14,15 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     refBuilder->get_widget("RedScale", redScale);
     refBuilder->get_widget("GreenScale", greenScale);
     refBuilder->get_widget("BlueScale", blueScale);
+    refBuilder->get_widget("HexColorLabel", hexColorLabel);
+    refBuilder->get_widget("FormatComboBox", formatComboBox);
 
     redScale->set_range(0, 256);
     blueScale->set_range(0, 256);
     greenScale->set_range(0, 256);
+    redScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
+    blueScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
+    greenScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
     colorArea->signal_draw().connect(sigc::mem_fun(this, &MainWindow::on_colorArea_draw));
     exitBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_exitButton_clicked) );
     colorPickerBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_colorPickerButton_clicked) );
@@ -26,6 +32,28 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     set_title("Picket");
     set_size_request(100, 350);
     color = Color(0,0,0);
+
+    InitColorFormatManager();
+    PopulateComboWithFormats();
+
+    // formatComboBox->append("something");
+    // formatComboBox->append("something else");
+    // formatComboBox->append("something or other");
+    // formatComboBox->set_active(1);
+}
+
+void MainWindow::on_color_changed()
+{
+    SyncColorWithScales();
+    hexColorLabel->set_text(color.GetHexString());
+    colorArea->queue_draw();
+}
+
+bool MainWindow::on_colorArea_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+{
+    cr->set_source_rgba(color.GetRedAsDouble(), color.GetGreenAsDouble(), color.GetBlueAsDouble(), 1);
+    cr->paint();
+    return true;
 }
 
 void MainWindow::on_exitButton_clicked()
@@ -48,14 +76,18 @@ void MainWindow::on_colorPickerButton_clicked()
 
 void MainWindow::on_clipboardButton_clicked()
 {
-	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
-	refClipboard->set_text(color.GetHexString());
+    colorFormatManager.SetVariables(color.GetVariables());
+    string selectedFormat = formatComboBox->get_active_text();
+    string format = colorFormatManager.GetFormat(selectedFormat);
 
-    auto Notification = Gio::Notification::create(color.GetHexString());
-	Notification->set_body("Copied to clipboard.");
-	auto Icon = Gio::ThemedIcon::create("colorpicker");
-	Notification->set_icon (Icon);
-	app->send_notification(Notification);
+    Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+    refClipboard->set_text(format);
+
+    auto Icon = Gio::ThemedIcon::create("colorpicker");
+    auto Notification = Gio::Notification::create(format);
+    Notification->set_body("Copied to clipboard.");
+    Notification->set_icon (Icon);
+    app->send_notification(Notification);
 }
 
 void MainWindow::on_hidden()
@@ -70,17 +102,31 @@ void MainWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
 
 void MainWindow::SetPickedColor(Color pickedColor)
 {
-    color = pickedColor;
+    redScale->set_value(pickedColor.GetRed());
+    greenScale->set_value(pickedColor.GetGreen());
+    blueScale->set_value(pickedColor.GetBlue());
+
+    SyncColorWithScales();
     colorArea->queue_draw();
-    redScale->set_value(color.GetRed());
-    greenScale->set_value(color.GetGreen());
-    blueScale->set_value(color.GetBlue());
-    std::cout << "Color:" << color.GetHexString() << std::endl;
 }
 
-bool MainWindow::on_colorArea_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+void MainWindow::SyncColorWithScales()
 {
-    cr->set_source_rgba(color.GetRedAsDouble(), color.GetGreenAsDouble(), color.GetBlueAsDouble(), 1);
-    cr->paint();
-    return true;
+    color.set(redScale->get_value(), greenScale->get_value(), blueScale->get_value());
+}
+
+void MainWindow::InitColorFormatManager()
+{
+    colorFormatManager = ColorFormatManager();
+    colorFormatManager.LoadFormats(".picket_formats");
+}
+
+void MainWindow::PopulateComboWithFormats()
+{
+    vector<string> formatKeys = colorFormatManager.GetFormatsKeys();
+    for(string &value: formatKeys)
+    {
+        formatComboBox->append(value);
+    }
+    formatComboBox->set_active(1);
 }

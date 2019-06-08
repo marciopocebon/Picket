@@ -1,21 +1,26 @@
 #pragma once
 
+#include<iterator>
+#include<map>
 #include<string>
+
+using namespace std;
 
 class Color
 {
-    private:
+private:
     int red = 0;
     int green = 0;
     int blue = 0;
     int hue = 0;
     int saturation = 0;
-    int luminence = 0;
+    int lightness = 0;
 
 
-    protected:
+protected:
+    void CalculateHSL();
 
-    public:
+public:
     Color();
     Color(int r, int g, int b);
     void set(int r, int g, int b);
@@ -32,4 +37,5 @@ class Color
     std::string GetHexString();
     std::string IntToHex(int i);
     Color GetContrastColor();
+    map<string, string> GetVariables();
 };

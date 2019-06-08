@@ -139,7 +139,6 @@
               <object class="GtkComboBoxText" id="FormatComboBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">15</property>
               </object>
               <packing>
                 <property name="expand">True</property>

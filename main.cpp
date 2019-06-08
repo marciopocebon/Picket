@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     MainWindow *window;
     builder->get_widget_derived("MainWindow", window);
-    window->set_app(app);
+    window->SetApp(app);
 
     return app->run(*window);
 }
