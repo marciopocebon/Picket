@@ -35,6 +35,7 @@
 *.exe
 *.out
 *.app
+picket
 
 # End of https://www.gitignore.io/api/c++
 

@@ -1,26 +1,31 @@
-objects = main.o mainwindow.o colorpickerwindow.o color.o colorformatmanager.o
+CXX ?= g++
+PROGRAM = picket
+CXXFILES = $(wildcard src/*.cpp)
+OBJS = $(CXXFILES:.cpp=.o)
+CXXFLAGS = `pkg-config --cflags gtkmm-3.0`
+LIBS = `pkg-config --libs gtkmm-3.0`
+GLADES = $(wildcard *.glade)
+GLADES_HOME = $(addprefix $(HOME)/,$(GLADES))
 
-main : $(objects)
-	g++ $(DEBUG) -o picket $(objects) `pkg-config gtkmm-3.0 --cflags --libs`
+all: $(PROGRAM)
+	cp $(GLADES) $(HOME)
+	mkdir -p $(HOME)/.picket
+	cp formats $(HOME)/.picket
 
-main.o : main.cpp
-	g++ $(DEBUG) -I /home/andrija/Projects/GtkMM/Picket/ -c main.cpp `pkg-config gtkmm-3.0 --cflags --libs`
+%.o: %.cpp
+	$(CXX) $^ -o $@ -I $(*D) -c $(CXXFLAGS)
 
-mainwindow.o : mainwindow.cpp
-	g++ $(DEBUG) -I /home/andrija/Projects/GtkMM/Picket/ -c mainwindow.cpp `pkg-config gtkmm-3.0 --cflags --libs`
+$(PROGRAM): $(OBJS)
+	$(CXX) -o $(PROGRAM) $(OBJS) $(LIBS)
 
-colorpickerwindow.o : colorpickerwindow.cpp
-	g++ $(DEBUG) -I /home/andrija/Projects/GtkMM/Picket/ -c colorpickerwindow.cpp `pkg-config gtkmm-3.0 --cflags --libs`
+debug: CXXFLAGS += -g
+debug: clean all
 
-color.o : color.cpp
-	g++ $(DEBUG) -I /home/andrija/Projects/GtkMM/Picket/ -c color.cpp
+.PHONY: clean
+clean:
+	rm -f $(OBJS)
+	rm -f $(GLADES_HOME)
 
-colorformatmanager.o : colorformatmanager.cpp
-	g++ $(DEBUG) -I /home/andrija/Projects/GtkMM/Picket/ -c colorformatmanager.cpp
-
-clean :
-	rm -f picket $(objects)
-
-debug: DEBUG = -g
-
-debug: clean main
+.PHONY: install
+install: $(PROGRAM)
+	cp $(PROGRAM) /usr/bin

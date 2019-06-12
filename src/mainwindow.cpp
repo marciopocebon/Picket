@@ -35,11 +35,6 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 
     InitColorFormatManager();
     PopulateComboWithFormats();
-
-    // formatComboBox->append("something");
-    // formatComboBox->append("something else");
-    // formatComboBox->append("something or other");
-    // formatComboBox->set_active(1);
 }
 
 void MainWindow::on_color_changed()
@@ -63,7 +58,7 @@ void MainWindow::on_exitButton_clicked()
 
 void MainWindow::on_colorPickerButton_clicked()
 {
-    auto builder = Gtk::Builder::create_from_file("ColorPickerWindow.glade");
+    auto builder = Gtk::Builder::create_from_file((string)getenv("HOME")+"/ColorPickerWindow.glade");
     ColorPickerWindow *colorPickerWindow;
     builder->get_widget_derived("ColorPickerWindow", colorPickerWindow);
     colorPickerWindow->SetApp(app);
@@ -118,7 +113,7 @@ void MainWindow::SyncColorWithScales()
 void MainWindow::InitColorFormatManager()
 {
     colorFormatManager = ColorFormatManager();
-    colorFormatManager.LoadFormats(".picket_formats");
+    colorFormatManager.LoadFormats((string)getenv("HOME")+"/.picket/formats");
 }
 
 void MainWindow::PopulateComboWithFormats()

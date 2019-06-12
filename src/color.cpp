@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -99,9 +100,9 @@ void Color::CalculateHSL()
 
     h /= 6;
 
-    hue = h;
-    saturation = s;
-    lightness = l;
+    hue = h*360;
+    saturation = round(s*100);
+    lightness = round(l*100);
 }
 
 map<string, string> Color::GetVariables()
