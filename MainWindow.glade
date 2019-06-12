@@ -122,16 +122,17 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel" id="HexColorLabel">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">15</property>
-                <property name="label" translatable="yes">#000000</property>
+                <property name="margin_right">10</property>
+                <property name="label" translatable="yes">Format: </property>
                 <property name="justify">center</property>
+                <property name="width_chars">10</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -148,54 +149,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar">
+              <object class="GtkLabel" id="HexColorLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <child>
-                  <object class="GtkToolButton" id="AddFormatBtn">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">AddFormat</property>
-                    <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-add</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="EditFormatBtn">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">EditFormat</property>
-                    <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-edit</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="DeleteFormatBtn">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">DeleteFormat</property>
-                    <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-delete</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
+                <property name="margin_left">15</property>
+                <property name="margin_right">10</property>
+                <property name="label" translatable="yes">#000000</property>
+                <property name="justify">center</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
+                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
