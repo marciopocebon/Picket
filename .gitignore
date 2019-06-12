@@ -37,6 +37,9 @@
 *.app
 picket
 
+#Glade bakcupfiles
+*.glade~
+
 # End of https://www.gitignore.io/api/c++
 
 .vscode
