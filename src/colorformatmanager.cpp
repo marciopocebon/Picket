@@ -13,28 +13,23 @@ ColorFormatManager::ColorFormatManager()
 
 void ColorFormatManager::LoadFormats(string formatFile)
 {
-    cout << "Color Format Manager :: LoadFormats." << endl;
     ifstream input(formatFile);
     for( std::string line; getline( input, line ); )
     {
         if(line.size() == 0)
         {
-            cout << "Size 0" << endl;
             continue;
         }
         else if(line.at(0) == '#')
         {
-            cout << "Comment: " << line << endl;
             continue;
         }
         else if(line.at(0) != '[')
         {
-            cout << "Format doesn't start with [" << line << endl;
             continue;
         }
         else
         {
-            cout << line << endl;
             string key = FindFormatKey(line);
             string format = GetFormatString(line);
             formats.insert(make_pair(key, format));

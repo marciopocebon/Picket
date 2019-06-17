@@ -3,7 +3,9 @@
 #include <sstream>
 #include "colorpickerwindow.h"
 #include "color.h"
+#include "config.h"
 #include <fstream>
+#include "INIReader.h"
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject)
 {
@@ -35,6 +37,13 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 
     InitColorFormatManager();
     PopulateComboWithFormats();
+    LoadConfiguration();
+}
+
+void MainWindow::LoadConfiguration()
+{
+    config = Config();
+    config.LoadConfiguration();
 }
 
 void MainWindow::on_color_changed()
@@ -90,6 +99,14 @@ void MainWindow::on_hidden()
     // std::cout << "Hidden" << std::endl;
 }
 
+void MainWindow::Show()
+{
+    if(config.ShouldQuitAfterPick())
+        on_exitButton_clicked();
+    else
+        show();
+}
+
 void MainWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
 {
     this->app = _app;
@@ -103,6 +120,9 @@ void MainWindow::SetPickedColor(Color pickedColor)
 
     SyncColorWithScales();
     colorArea->queue_draw();
+
+    if(config.ShouldCopyAfterPick())
+        on_clipboardButton_clicked();
 }
 
 void MainWindow::SyncColorWithScales()

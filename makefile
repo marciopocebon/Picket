@@ -11,6 +11,7 @@ all: $(PROGRAM)
 	cp $(GLADES) $(HOME)
 	mkdir -p $(HOME)/.picket
 	cp formats $(HOME)/.picket
+	cp config.ini $(HOME)/.picket
 
 %.o: %.cpp
 	$(CXX) $^ -o $@ -I $(*D) -c $(CXXFLAGS)

@@ -3,12 +3,15 @@
 #include <gtkmm.h>
 #include "color.h"
 #include "colorformatmanager.h"
+#include "config.h"
 
 class MainWindow : public Gtk::Window
 {
     private:
     Color color;
+    Config config;
     void InitColorFormatManager();
+    void LoadConfiguration();
 
     protected:
     Glib::RefPtr<Gtk::Application> app;
@@ -27,6 +30,7 @@ class MainWindow : public Gtk::Window
     public:
     MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
+    void Show();
     void SetApp(Glib::RefPtr<Gtk::Application> _app);
     void SetPickedColor(Color pickedColor);
     void SyncColorWithScales();

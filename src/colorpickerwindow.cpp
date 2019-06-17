@@ -29,7 +29,7 @@ ColorPickerWindow::ColorPickerWindow(BaseObjectType* cobject, const Glib::RefPtr
 
 void ColorPickerWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
 {
-    this->app = _app;
+    app = _app;
 }
 
 void ColorPickerWindow::SetMainWindow(MainWindow* _mainWindow)
@@ -151,8 +151,8 @@ bool ColorPickerWindow::on_my_motion_notify_event(GdkEventMotion* motion_event)
     x = motion_event->x_root;
     y = motion_event->y_root;
 
-    this->GetPixelFromPixbuf(x, y, screenshot, screenshot->get_pixels());
-    drawingArea->queue_draw();
+    GetPixelFromPixbuf(x, y, screenshot, screenshot->get_pixels());
+    Redraw();
 
     return true;
 }
@@ -164,6 +164,7 @@ bool ColorPickerWindow::on_key_pressed(GdkEventKey* event)
     // move mouse pointer
     auto display = this->get_display();
     auto device = display->get_default_seat()->get_pointer();
+
     if(event->hardware_keycode == 113) //left
       device->warp(this->get_screen(),x-1,y);
     else if(event->hardware_keycode == 114) // right
@@ -173,19 +174,11 @@ bool ColorPickerWindow::on_key_pressed(GdkEventKey* event)
     else if(event->hardware_keycode == 116) // down
       device->warp(this->get_screen(),x,y+1);
     else if(event->hardware_keycode == 86) // +
-    {
-        pixelsPerRow = pixelsPerRow + 2 > maxPixelsPerRow ? maxPixelsPerRow : pixelsPerRow + 2;
-        magnifierSize = pixelSize*pixelsPerRow;
-        drawingArea->queue_draw();
-    }
+        ChangePixelsPerRow(2);
     else if(event->hardware_keycode == 82) // -
-    {
-        pixelsPerRow = pixelsPerRow - 2 < minPixelsPerRow ? minPixelsPerRow : pixelsPerRow - 2;
-        magnifierSize = pixelSize*pixelsPerRow;
-        drawingArea->queue_draw();
-    }
+        ChangePixelsPerRow(-2);
 
-    drawingArea->queue_draw();
+    Redraw();
     return true;
 }
 
@@ -195,7 +188,7 @@ bool ColorPickerWindow::on_button_pressed(GdkEventButton* button_event)
     {
       this->hide();
       this->mainWindow->SetPickedColor(color);
-      this->mainWindow->show();
+      this->mainWindow->Show();
     }
 
     return true;
@@ -204,22 +197,11 @@ bool ColorPickerWindow::on_button_pressed(GdkEventButton* button_event)
 bool ColorPickerWindow::on_scroll(GdkEventScroll* scroll_event)
 {
     if(scroll_event->direction == GDK_SCROLL_UP)
-    {
-        // pixelSize += 1;
-        auto newPixelSize = pixelSize + 1;
-        pixelSize = newPixelSize > maxPixelSize ? maxPixelSize : newPixelSize;
-        magnifierSize = pixelSize*pixelsPerRow;
-        drawingArea->queue_draw();
-    }
+        ChangePixelSize(1);
     else if(scroll_event->direction == GDK_SCROLL_DOWN)
-    {
-        // pixelSize -= 1;
-        auto newPixelSize = pixelSize - 1;
-        pixelSize = newPixelSize < minPixelSize ? minPixelSize : newPixelSize;
-        magnifierSize = pixelSize*pixelsPerRow;
-        drawingArea->queue_draw();
-    }
+        ChangePixelSize(-1);
 
+    Redraw();
     return true;
 }
 
@@ -229,4 +211,40 @@ void ColorPickerWindow::GetPixelFromPixbuf(double x, double y, Glib::RefPtr<Gdk:
     p = pixels + ((int)y) * pixbuf->get_rowstride() + ((int)x) * pixbuf->get_n_channels();
 
     color.set((p[0]<<8) / 256, (p[1]<<8) / 256, (p[2]<<8) / 256);
+}
+
+void ColorPickerWindow::ChangePixelsPerRow(int change)
+{
+    auto newPixelsPerRow = pixelsPerRow + change;
+    if(newPixelsPerRow > maxPixelsPerRow)
+        pixelsPerRow = maxPixelsPerRow;
+    else if(newPixelsPerRow < minPixelsPerRow)
+        pixelsPerRow = minPixelsPerRow;
+    else
+        pixelsPerRow = newPixelsPerRow;
+
+    CalculateMagnifierSize();
+}
+
+void ColorPickerWindow::ChangePixelSize(int change)
+{
+    auto newPixelSize = pixelSize + change;
+    if(newPixelSize > maxPixelSize)
+        pixelSize = maxPixelSize;
+    else if(newPixelSize < minPixelSize)
+        pixelSize = minPixelSize;
+    else
+        pixelSize = newPixelSize;
+
+    CalculateMagnifierSize();
+}
+
+void ColorPickerWindow::CalculateMagnifierSize()
+{
+    magnifierSize = pixelSize*pixelsPerRow;
+}
+
+void ColorPickerWindow::Redraw()
+{
+    drawingArea->queue_draw();
 }
