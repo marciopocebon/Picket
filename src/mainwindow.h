@@ -12,6 +12,7 @@ class MainWindow : public Gtk::Window
     Config config;
     void InitColorFormatManager();
     void LoadConfiguration();
+    void SaveConfiguration();
 
     protected:
     Glib::RefPtr<Gtk::Application> app;
@@ -42,4 +43,5 @@ class MainWindow : public Gtk::Window
     void on_colorPickerButton_clicked();
     void on_clipboardButton_clicked();
     void on_color_changed();
+    void on_format_changed();
 };

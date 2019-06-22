@@ -15,45 +15,42 @@ bool Config::LoadConfiguration()
     {
         width = GetInteger("global", "width", 0);
         height = GetInteger("global", "height", 0);
+        startImmediatePick = GetBoolean("global", "start_immediate_pick", false);
         copyToClipboardAfterPick = GetBoolean("global", "copy_to_clipboard_after_pick", false);
         quitAfterPick = GetBoolean("global", "quit_after_pick", false);
+        lastFormat = GetInteger("global", "last_format", 1);
         pixelSize = GetInteger("magnifier", "pixel_size", -1);
         pixelsPerRow = GetInteger("magnifier", "pixels_per_row", -1);
 
-
-        cout << "Width: " << width << endl;
-        cout << "Height: " << height << endl;
-        cout << "CopyToClipboardAfterPick: " << copyToClipboardAfterPick << endl;
-        cout << "QuitAfterPick: " << quitAfterPick << endl;
-        cout << "PixelSize: " << pixelSize << endl;
-        cout << "PixelsPerRow: " << pixelsPerRow << endl;
+        // cout << "Width: " << width << endl;
+        // cout << "Height: " << height << endl;
+        // cout << "CopyToClipboardAfterPick: " << copyToClipboardAfterPick << endl;
+        // cout << "QuitAfterPick: " << quitAfterPick << endl;
+        // cout << "LastFormat: " << lastFormat << endl;
+        // cout << "PixelSize: " << pixelSize << endl;
+        // cout << "PixelsPerRow: " << pixelsPerRow << endl;
 
         return true;
     }
 
     return false;
-
-    // INIReader reader((string)getenv("HOME")+"/.picket/config.ini");
-
-    // if (reader.ParseError() != 0) {
-    //     cout << "Can't load 'config.ini'\n";
-    //     return false;
-    // }
-
-    // width = reader.GetInteger("global", "width", 0);
-    // height = reader.GetInteger("global", "height", 0);
-    // copyToClipboardAfterPick = reader.GetBoolean("global", "copy_to_clipboard_after_pick", false);
-    // quitAfterPick = reader.GetBoolean("global", "quit_after_pick", false);
-    // pixelSize = reader.GetInteger("magnifier", "pixel_size", -1);
-    // pixelsPerRow = reader.GetInteger("magnifier", "pixels_per_row", -1);
-
-    // cout << "Config loaded form 'config.ini'." << endl;
 }
 
-int Config::GetWidth() { return width; }
-int Config::GetHeight() { return height; }
-bool Config::ShouldCopyAfterPick() { return copyToClipboardAfterPick; }
-bool Config::ShouldQuitAfterPick() { return quitAfterPick; }
+bool Config::SaveConfiguration()
+{
+    mINI::INIFile file(filePath);
+
+    ini["global"]["width"] = to_string(width);
+    ini["global"]["height"] = to_string(height);
+    ini["global"]["start_immediate_pick"] = to_string(startImmediatePick);
+    ini["global"]["copy_to_clipboard_after_pick"] = to_string(copyToClipboardAfterPick);
+    ini["global"]["quit_after_pick"] = to_string(quitAfterPick);
+    ini["global"]["last_format"] = to_string(lastFormat);
+    ini["magnifier"]["pixel_size"] = to_string(pixelSize);
+    ini["magnifier"]["pixels_per_row"] = to_string(pixelsPerRow);
+
+    return file.write(ini, true);
+}
 
 string Config::Get(string section, string name, string default_value)
 {

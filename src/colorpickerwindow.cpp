@@ -37,6 +37,14 @@ void ColorPickerWindow::SetMainWindow(MainWindow* _mainWindow)
     mainWindow = _mainWindow;
 }
 
+void ColorPickerWindow::SetConfig(Config* cfg)
+{
+    config = cfg;
+    pixelSize = config->GetPixelSize();
+    pixelsPerRow = config->GetPixelsPerRow();
+    CalculateMagnifierSize();
+}
+
 void ColorPickerWindow::on_showed()
 {
     //Take screenshot
@@ -186,9 +194,11 @@ bool ColorPickerWindow::on_button_pressed(GdkEventButton* button_event)
 {
     if(button_event->button == 1)
     {
-      this->hide();
-      this->mainWindow->SetPickedColor(color);
-      this->mainWindow->Show();
+        config->SetPixelSize(pixelSize);
+        config->SetPixelsPerRow(pixelsPerRow);
+        this->hide();
+        this->mainWindow->SetPickedColor(color);
+        this->mainWindow->Show();
     }
 
     return true;

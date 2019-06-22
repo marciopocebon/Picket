@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 #include "mainwindow.h"
 #include "color.h"
+#include "config.h"
 
 class ColorPickerWindow : public Gtk::Window
 {
@@ -15,6 +16,7 @@ private:
     int yn = 0;
 
     Color color;
+    Config* config;
 
     int minPixelSize = 2;
     int maxPixelSize = 15;
@@ -44,9 +46,11 @@ protected:
     bool on_my_motion_notify_event(GdkEventMotion* motion_event);
     bool on_scroll(GdkEventScroll* scroll_event);
 
+    void GetPixelFromPixbuf(double x, double y, Glib::RefPtr<Gdk::Pixbuf> pixbuf, unsigned char *pixels);
+
 public:
     ColorPickerWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
     void SetApp(Glib::RefPtr<Gtk::Application> _app);
     void SetMainWindow(MainWindow* _mainWindow);
-    void GetPixelFromPixbuf(double x, double y, Glib::RefPtr<Gdk::Pixbuf> pixbuf, unsigned char *pixels);
+    void SetConfig(Config* cfg);
 };

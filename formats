@@ -1,9 +1,9 @@
-[RGB] Color($r$, $g$, $b$);
+[RGB]Color($r$, $g$, $b$);
 # This is a comment
 
-[RGB_1.0] Color($r_d$, $g_d$, $b_d$);
+[RGB_1.0]Color($r_d$, $g_d$, $b_d$);
 ----
-[HSL] Color($h$, $s$, $l$);
+[HSL]Color($h$, $s$, $l$);
 
 # Hex color value
 [HEX]#$r#$$g#$$b#$
