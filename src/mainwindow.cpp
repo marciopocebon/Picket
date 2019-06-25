@@ -35,24 +35,11 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     set_title("Picket");
     set_size_request(100, 350);
     color = Color(0,0,0);
-    config = Config();
-
-    LoadConfiguration();
-    InitColorFormatManager();
-    PopulateComboWithFormats();
-
-    if(config.ShouldStartImmediatePick())
-        on_colorPickerButton_clicked();
-}
-
-void MainWindow::LoadConfiguration()
-{
-    config.LoadConfiguration();
 }
 
 void MainWindow::SaveConfiguration()
 {
-    bool configurationSaved = config.SaveConfiguration();
+    bool configurationSaved = config->SaveConfiguration();
 
     if(configurationSaved)
         cout << "Configuration saved!" << endl;
@@ -65,6 +52,11 @@ void MainWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
     this->app = _app;
 }
 
+void MainWindow::SetConfig(Config* cfg)
+{
+    config = cfg;
+}
+
 void MainWindow::SetPickedColor(Color pickedColor)
 {
     redScale->set_value(pickedColor.GetRed());
@@ -74,7 +66,7 @@ void MainWindow::SetPickedColor(Color pickedColor)
     SyncColorWithScales();
     colorArea->queue_draw();
 
-    if(config.ShouldCopyAfterPick())
+    if(config->ShouldCopyAfterPick())
         on_clipboardButton_clicked();
 }
 
@@ -96,13 +88,13 @@ void MainWindow::PopulateComboWithFormats()
     {
         formatComboBox->append(value);
     }
-    cout << "config.LastFormat:" << config.GetLastFormat() << endl;
-    formatComboBox->set_active(config.GetLastFormat());
+    cout << "config->LastFormat:" << config->GetLastFormat() << endl;
+    formatComboBox->set_active(config->GetLastFormat());
 }
 
 void MainWindow::Show()
 {
-    if(config.ShouldQuitAfterPick())
+    if(config->ShouldQuitAfterPick())
         on_exitButton_clicked();
     else
         show();
@@ -135,7 +127,7 @@ void MainWindow::on_colorPickerButton_clicked()
     builder->get_widget_derived("ColorPickerWindow", colorPickerWindow);
     colorPickerWindow->SetApp(app);
     colorPickerWindow->SetMainWindow(this);
-    colorPickerWindow->SetConfig(&config);
+    colorPickerWindow->SetConfig(config);
     this->app->hold();
     this->hide();
 
@@ -168,5 +160,5 @@ void MainWindow::on_format_changed()
 {
     cout << "Format Changed! New Format: " << formatComboBox->get_active_text() << endl;
     cout << "Active Row number: " << formatComboBox->get_active_row_number() << endl;
-    config.SetLastFormat(formatComboBox->get_active_row_number());
+    config->SetLastFormat(formatComboBox->get_active_row_number());
 }

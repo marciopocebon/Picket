@@ -9,8 +9,7 @@ class MainWindow : public Gtk::Window
 {
     private:
     Color color;
-    Config config;
-    void InitColorFormatManager();
+    Config* config;
     void LoadConfiguration();
     void SaveConfiguration();
 
@@ -33,9 +32,11 @@ class MainWindow : public Gtk::Window
 
     void Show();
     void SetApp(Glib::RefPtr<Gtk::Application> _app);
+    void SetConfig(Config* cfg);
     void SetPickedColor(Color pickedColor);
     void SyncColorWithScales();
     void PopulateComboWithFormats();
+    void InitColorFormatManager();
 
     void on_hidden();
     bool on_colorArea_draw(const Cairo::RefPtr<Cairo::Context>& cr);

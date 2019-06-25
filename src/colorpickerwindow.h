@@ -31,6 +31,7 @@ private:
     void ChangePixelSize(int change);
     void CalculateMagnifierSize();
     void Redraw();
+    void FinishPick(bool takeColor);
 
 protected:
     Glib::RefPtr<Gtk::Application> app;

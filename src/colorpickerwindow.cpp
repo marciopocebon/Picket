@@ -167,24 +167,46 @@ bool ColorPickerWindow::on_my_motion_notify_event(GdkEventMotion* motion_event)
 
 bool ColorPickerWindow::on_key_pressed(GdkEventKey* event)
 {
-    // std::cout << event->keyval << ' ' << event->hardware_keycode << ' ' << event->state << std::endl;
-
     // move mouse pointer
     auto display = this->get_display();
     auto device = display->get_default_seat()->get_pointer();
 
-    if(event->hardware_keycode == 113) //left
-      device->warp(this->get_screen(),x-1,y);
-    else if(event->hardware_keycode == 114) // right
-      device->warp(this->get_screen(),x+1,y);
-    else if(event->hardware_keycode == 111) // up
-      device->warp(this->get_screen(),x,y-1);
-    else if(event->hardware_keycode == 116) // down
-      device->warp(this->get_screen(),x,y+1);
-    else if(event->hardware_keycode == 86) // +
-        ChangePixelsPerRow(2);
-    else if(event->hardware_keycode == 82) // -
-        ChangePixelsPerRow(-2);
+    switch(event->keyval)
+    {
+        case GDK_KEY_w:
+        case GDK_KEY_Up:
+            device->warp(this->get_screen(),x,y-1);
+            break;
+        case GDK_KEY_s:
+        case GDK_KEY_Down:
+            device->warp(this->get_screen(),x,y+1);
+            break;
+        case GDK_KEY_a:
+        case GDK_KEY_Left:
+            device->warp(this->get_screen(),x-1,y);
+            break;
+        case GDK_KEY_d:
+        case GDK_KEY_Right:
+            device->warp(this->get_screen(),x+1,y);
+            break;
+        case GDK_KEY_e:
+        case GDK_KEY_plus:
+            ChangePixelsPerRow(2);
+            break;
+        case GDK_KEY_q:
+        case GDK_KEY_minus:
+            ChangePixelsPerRow(-2);
+            break;
+        case GDK_KEY_space:
+        case GDK_KEY_Return:
+            FinishPick(true);
+            break;
+        case GDK_KEY_Escape:
+            FinishPick(false);
+            break;
+        default:
+            break;
+    }
 
     Redraw();
     return true;
@@ -194,11 +216,7 @@ bool ColorPickerWindow::on_button_pressed(GdkEventButton* button_event)
 {
     if(button_event->button == 1)
     {
-        config->SetPixelSize(pixelSize);
-        config->SetPixelsPerRow(pixelsPerRow);
-        this->hide();
-        this->mainWindow->SetPickedColor(color);
-        this->mainWindow->Show();
+        FinishPick(true);
     }
 
     return true;
@@ -257,4 +275,16 @@ void ColorPickerWindow::CalculateMagnifierSize()
 void ColorPickerWindow::Redraw()
 {
     drawingArea->queue_draw();
+}
+
+
+void ColorPickerWindow::FinishPick(bool takeColor)
+{
+    config->SetPixelSize(pixelSize);
+    config->SetPixelsPerRow(pixelsPerRow);
+
+    if(takeColor) this->mainWindow->SetPickedColor(color);
+    this->mainWindow->Show();
+    this->app->hold();
+    this->hide();
 }
