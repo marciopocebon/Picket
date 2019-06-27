@@ -3,6 +3,10 @@
 #include<iterator>
 #include<map>
 #include<string>
+#include<math.h>
+#include<iostream>
+#include<sstream>
+#include<iomanip>
 
 using namespace std;
 
@@ -16,6 +20,16 @@ private:
     int hue = 0;
     int saturation = 0;
     int lightness = 0;
+    double RoundTo(double value, int n)
+    {
+        return floor(value*pow(10,n)+0.5)/pow(10,n);
+    }
+    string DoubleToString(double value,int precision)
+    {
+        std::stringstream sstream;
+        sstream << setprecision(precision) << value;
+        return sstream.str();
+    }
 
 
 protected:
@@ -26,7 +40,7 @@ protected:
 public:
     Color();
     Color(int r, int g, int b);
-    void SetRGB(int r, int g, int b, int a = 255);
+    void SetRGB(int r, int g, int b, int a = 256);
     void SetHSL(int h, int s, int l);
 
     int GetRed() {return red;}
