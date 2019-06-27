@@ -23,6 +23,7 @@ class MainWindow : public Gtk::Window
     Gtk::Scale *redScale;
     Gtk::Scale *greenScale;
     Gtk::Scale *blueScale;
+    Gtk::Scale *alphaScale;
     Gtk::Label *hexColorLabel;
     Gtk::ComboBoxText *formatComboBox;
     ColorFormatManager colorFormatManager;

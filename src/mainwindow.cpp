@@ -16,15 +16,18 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     refBuilder->get_widget("RedScale", redScale);
     refBuilder->get_widget("GreenScale", greenScale);
     refBuilder->get_widget("BlueScale", blueScale);
+    refBuilder->get_widget("AlphaScale", alphaScale);
     refBuilder->get_widget("HexColorLabel", hexColorLabel);
     refBuilder->get_widget("FormatComboBox", formatComboBox);
 
     redScale->set_range(0, 256);
     blueScale->set_range(0, 256);
     greenScale->set_range(0, 256);
+    alphaScale->set_range(0, 256);
     redScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
-    blueScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
     greenScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
+    blueScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
+    alphaScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
     colorArea->signal_draw().connect(sigc::mem_fun(this, &MainWindow::on_colorArea_draw));
     exitBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_exitButton_clicked) );
     colorPickerBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_colorPickerButton_clicked) );
@@ -62,6 +65,7 @@ void MainWindow::SetPickedColor(Color pickedColor)
     redScale->set_value(pickedColor.GetRed());
     greenScale->set_value(pickedColor.GetGreen());
     blueScale->set_value(pickedColor.GetBlue());
+    alphaScale->set_value(pickedColor.GetAlpha());
 
     SyncColorWithScales();
     colorArea->queue_draw();
@@ -72,7 +76,7 @@ void MainWindow::SetPickedColor(Color pickedColor)
 
 void MainWindow::SyncColorWithScales()
 {
-    color.set(redScale->get_value(), greenScale->get_value(), blueScale->get_value());
+    color.SetRGB(redScale->get_value(), greenScale->get_value(), blueScale->get_value(), alphaScale->get_value());
 }
 
 void MainWindow::InitColorFormatManager()
@@ -88,7 +92,6 @@ void MainWindow::PopulateComboWithFormats()
     {
         formatComboBox->append(value);
     }
-    cout << "config->LastFormat:" << config->GetLastFormat() << endl;
     formatComboBox->set_active(config->GetLastFormat());
 }
 
@@ -109,7 +112,7 @@ void MainWindow::on_color_changed()
 
 bool MainWindow::on_colorArea_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
-    cr->set_source_rgba(color.GetRedAsDouble(), color.GetGreenAsDouble(), color.GetBlueAsDouble(), 1);
+    cr->set_source_rgba(color.GetRedAsDouble(), color.GetGreenAsDouble(), color.GetBlueAsDouble(), color.GetAlphaAsDouble());
     cr->paint();
     return true;
 }
@@ -152,13 +155,9 @@ void MainWindow::on_clipboardButton_clicked()
 
 void MainWindow::on_hidden()
 {
-    // std::cout << "Hidden" << std::endl;
 }
-
 
 void MainWindow::on_format_changed()
 {
-    cout << "Format Changed! New Format: " << formatComboBox->get_active_text() << endl;
-    cout << "Active Row number: " << formatComboBox->get_active_row_number() << endl;
     config->SetLastFormat(formatComboBox->get_active_row_number());
 }

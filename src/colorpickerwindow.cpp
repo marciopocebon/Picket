@@ -238,7 +238,7 @@ void ColorPickerWindow::GetPixelFromPixbuf(double x, double y, Glib::RefPtr<Gdk:
     guchar *p;
     p = pixels + ((int)y) * pixbuf->get_rowstride() + ((int)x) * pixbuf->get_n_channels();
 
-    color.set((p[0]<<8) / 256, (p[1]<<8) / 256, (p[2]<<8) / 256);
+    color.SetRGB((p[0]<<8) / 256, (p[1]<<8) / 256, (p[2]<<8) / 256);
 }
 
 void ColorPickerWindow::ChangePixelsPerRow(int change)
