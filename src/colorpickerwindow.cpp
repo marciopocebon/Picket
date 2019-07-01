@@ -100,7 +100,7 @@ bool ColorPickerWindow::on_my_draw(const Cairo::RefPtr<Cairo::Context>& cr)
     Gdk::Cairo::set_source_pixbuf(cr, screenshot, 0, 0);
     cr->paint();
 
-    this->TranslateToInnerBounds();
+    TranslateToInnerBounds();
 
     // draw magnifier
     Glib::RefPtr<Gdk::Pixbuf> subImage =  Gdk::Pixbuf::create_subpixbuf(screenshot, xn, yn, pixelsPerRow, pixelsPerRow);
@@ -283,8 +283,16 @@ void ColorPickerWindow::FinishPick(bool takeColor)
     config->SetPixelSize(pixelSize);
     config->SetPixelsPerRow(pixelsPerRow);
 
-    if(takeColor) this->mainWindow->SetPickedColor(color);
-    this->mainWindow->Show();
-    this->app->hold();
-    this->hide();
+    if(takeColor)
+    {
+        mainWindow->SetPickedColor(color);
+        mainWindow->Show(Gtk::RESPONSE_ACCEPT);
+    }
+    else
+    {
+        mainWindow->Show(Gtk::RESPONSE_CANCEL);
+    }
+
+    app->hold();
+    hide();
 }

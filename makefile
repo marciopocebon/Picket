@@ -5,11 +5,11 @@ OBJS = $(CXXFILES:.cpp=.o)
 CXXFLAGS = `pkg-config --cflags gtkmm-3.0`
 LIBS = `pkg-config --libs gtkmm-3.0`
 GLADES = $(wildcard *.glade)
-GLADES_HOME = $(addprefix $(HOME)/,$(GLADES))
+GLADES_HOME = $(addprefix $(HOME)/.picket/,$(GLADES))
 
 all: $(PROGRAM)
-	cp $(GLADES) $(HOME)
 	mkdir -p $(HOME)/.picket
+	cp $(GLADES) $(HOME)/.picket
 	cp formats $(HOME)/.picket
 	cp config.ini $(HOME)/.picket
 

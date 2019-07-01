@@ -1,15 +1,16 @@
 #include <gtkmm.h>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include "colorpickerwindow.h"
 #include "color.h"
 #include "config.h"
-#include <fstream>
 #include "INIReader.h"
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject)
 {
     refBuilder->get_widget("ExitBtn", exitBtn);
+    refBuilder->get_widget("SettingsBtn", settingsBtn);
     refBuilder->get_widget("ColorPickerBtn", colorPickerBtn);
     refBuilder->get_widget("ClipboardBtn", clipboardBtn);
     refBuilder->get_widget("ColorArea", colorArea);
@@ -30,6 +31,7 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     alphaScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
     colorArea->signal_draw().connect(sigc::mem_fun(this, &MainWindow::on_colorArea_draw));
     exitBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_exitButton_clicked) );
+    settingsBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_settingsButton_clicked) );
     colorPickerBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_colorPickerButton_clicked) );
     clipboardBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_clipboardButton_clicked) );
     formatComboBox->signal_changed().connect(sigc::mem_fun(this, &MainWindow::on_format_changed));
@@ -58,6 +60,16 @@ void MainWindow::SetApp(Glib::RefPtr<Gtk::Application> _app)
 void MainWindow::SetConfig(Config* cfg)
 {
     config = cfg;
+}
+
+void MainWindow::SetColorPickerWindow(ColorPickerWindow* _colorPickerWindow)
+{
+    colorPickerWindow = _colorPickerWindow;
+}
+
+void MainWindow::SetSettingsWindow(SettingsWindow* _settingsWindow)
+{
+    settingsWindow = _settingsWindow;
 }
 
 void MainWindow::SetPickedColor(Color pickedColor)
@@ -95,12 +107,19 @@ void MainWindow::PopulateComboWithFormats()
     formatComboBox->set_active(config->GetLastFormat());
 }
 
-void MainWindow::Show()
+void MainWindow::Show(int response)
 {
-    if(config->ShouldQuitAfterPick())
-        on_exitButton_clicked();
-    else
+    if(response == Gtk::RESPONSE_ACCEPT)
+    {
+        if(config->ShouldQuitAfterPick())
+            on_exitButton_clicked();
+        else
+            show();
+    }
+    else if(response == Gtk::RESPONSE_CANCEL)
+    {
         show();
+    }
 }
 
 void MainWindow::on_color_changed()
@@ -123,16 +142,20 @@ void MainWindow::on_exitButton_clicked()
     app->quit();
 }
 
+void MainWindow::on_settingsButton_clicked()
+{
+    int result = settingsWindow->run();
+    if(result == Gtk::RESPONSE_ACCEPT)
+        SaveConfiguration();
+
+    settingsWindow->SetConfig(config);
+    settingsWindow->close();
+}
+
 void MainWindow::on_colorPickerButton_clicked()
 {
-    auto builder = Gtk::Builder::create_from_file((string)getenv("HOME")+"/ColorPickerWindow.glade");
-    ColorPickerWindow *colorPickerWindow;
-    builder->get_widget_derived("ColorPickerWindow", colorPickerWindow);
-    colorPickerWindow->SetApp(app);
-    colorPickerWindow->SetMainWindow(this);
-    colorPickerWindow->SetConfig(config);
-    this->app->hold();
-    this->hide();
+    app->hold();
+    hide();
 
     colorPickerWindow->show();
 }
@@ -146,7 +169,7 @@ void MainWindow::on_clipboardButton_clicked()
     Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
     refClipboard->set_text(format);
 
-    auto Icon = Gio::ThemedIcon::create("colorpicker");
+    auto Icon = Gio::ThemedIcon::create("color-picker");
     auto Notification = Gio::Notification::create(format);
     Notification->set_body("Copied to clipboard.");
     Notification->set_icon (Icon);

@@ -5,6 +5,8 @@
 #include "color.h"
 #include "config.h"
 
+class MainWindow;
+
 class ColorPickerWindow : public Gtk::Window
 {
 private:
