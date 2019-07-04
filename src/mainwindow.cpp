@@ -21,10 +21,11 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     refBuilder->get_widget("HexColorLabel", hexColorLabel);
     refBuilder->get_widget("FormatComboBox", formatComboBox);
 
-    redScale->set_range(0, 256);
-    blueScale->set_range(0, 256);
-    greenScale->set_range(0, 256);
-    alphaScale->set_range(0, 256);
+    redScale->set_range(0, 255);
+    blueScale->set_range(0, 255);
+    greenScale->set_range(0, 255);
+    alphaScale->set_range(0, 255);
+    alphaScale->set_value(255);
     redScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
     greenScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));
     blueScale->signal_value_changed().connect(sigc::mem_fun(this, &MainWindow::on_color_changed));

@@ -141,6 +141,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">15</property>
+                <property name="margin_right">10</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -154,8 +155,11 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">15</property>
                 <property name="margin_right">10</property>
-                <property name="label" translatable="yes">#000000</property>
+                <property name="label" translatable="yes">#000000FF</property>
                 <property name="justify">center</property>
+                <attributes>
+                  <attribute name="font-desc" value="Monospace Bold 12"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -179,7 +183,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Red</property>
+                <property name="justify">right</property>
                 <property name="width_chars">10</property>
+                <attributes>
+                  <attribute name="foreground" value="#cccc00000000"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -191,7 +199,9 @@
               <object class="GtkScale" id="RedScale">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_right">5</property>
                 <property name="hexpand">True</property>
+                <property name="show_fill_level">True</property>
                 <property name="round_digits">1</property>
                 <property name="digits">0</property>
                 <property name="value_pos">right</property>
@@ -219,6 +229,9 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Green</property>
                 <property name="width_chars">10</property>
+                <attributes>
+                  <attribute name="foreground" value="#4e4e9a9a0606"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -230,6 +243,7 @@
               <object class="GtkScale" id="GreenScale">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_right">5</property>
                 <property name="hexpand">True</property>
                 <property name="round_digits">1</property>
                 <property name="digits">0</property>
@@ -258,6 +272,9 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Blue</property>
                 <property name="width_chars">10</property>
+                <attributes>
+                  <attribute name="foreground" value="#34346565a4a4"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -269,6 +286,7 @@
               <object class="GtkScale" id="BlueScale">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_right">5</property>
                 <property name="hexpand">True</property>
                 <property name="round_digits">1</property>
                 <property name="digits">0</property>
@@ -308,6 +326,7 @@
               <object class="GtkScale" id="AlphaScale">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_right">5</property>
                 <property name="hexpand">True</property>
                 <property name="round_digits">1</property>
                 <property name="digits">0</property>

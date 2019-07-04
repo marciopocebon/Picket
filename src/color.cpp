@@ -45,7 +45,7 @@ string Color::IntToHex(int i)
 string Color::GetHexString()
 {
     std::stringstream sstream;
-    sstream << "#" << GetRedHex() << GetGreenHex() << GetBlueHex();
+    sstream << "#" << GetRedHex() << GetGreenHex() << GetBlueHex() << GetAlphaHex();
     return sstream.str();
 }
 
@@ -60,9 +60,9 @@ Color Color::GetContrastColor()
 
 void Color::RgbToHsl(int red, int green, int blue, int* hue, int* saturation, int* lightness)
 {
-    double r = (double)red/256;
-    double g = (double)green/256;
-    double b = (double)blue/256;
+    double r = (double)red/255;
+    double g = (double)green/255;
+    double b = (double)blue/255;
 
     double colors[] = { r,g,b };
 
@@ -145,10 +145,18 @@ map<string, string> Color::GetVariables()
     variables.insert(make_pair("$g$", to_string(green)));
     variables.insert(make_pair("$b$", to_string(blue)));
     variables.insert(make_pair("$a$", to_string(alpha)));
-    variables.insert(make_pair("$r_d$", DoubleToString(GetRedAsDouble(),2)));
-    variables.insert(make_pair("$g_d$", DoubleToString(GetGreenAsDouble(),2)));
-    variables.insert(make_pair("$b_d$", DoubleToString(GetBlueAsDouble(),2)));
-    variables.insert(make_pair("$a_d$", DoubleToString(GetAlphaAsDouble(),2)));
+    variables.insert(make_pair("$r_d$", DoubleToString(GetRedAsDouble(),6)));
+    variables.insert(make_pair("$g_d$", DoubleToString(GetGreenAsDouble(),6)));
+    variables.insert(make_pair("$b_d$", DoubleToString(GetBlueAsDouble(),6)));
+    variables.insert(make_pair("$a_d$", DoubleToString(GetAlphaAsDouble(),6)));
+    variables.insert(make_pair("$r_d1$", DoubleToString(GetRedAsDouble(),1)));
+    variables.insert(make_pair("$g_d1$", DoubleToString(GetGreenAsDouble(),1)));
+    variables.insert(make_pair("$b_d1$", DoubleToString(GetBlueAsDouble(),1)));
+    variables.insert(make_pair("$a_d1$", DoubleToString(GetAlphaAsDouble(),1)));
+    variables.insert(make_pair("$r_d2$", DoubleToString(GetRedAsDouble(),2)));
+    variables.insert(make_pair("$g_d2$", DoubleToString(GetGreenAsDouble(),2)));
+    variables.insert(make_pair("$b_d2$", DoubleToString(GetBlueAsDouble(),2)));
+    variables.insert(make_pair("$a_d2$", DoubleToString(GetAlphaAsDouble(),2)));
     variables.insert(make_pair("$r_d3$", DoubleToString(GetRedAsDouble(),3)));
     variables.insert(make_pair("$g_d3$", DoubleToString(GetGreenAsDouble(),3)));
     variables.insert(make_pair("$b_d3$", DoubleToString(GetBlueAsDouble(),3)));
@@ -168,6 +176,7 @@ map<string, string> Color::GetVariables()
     variables.insert(make_pair("$r_hex$", GetRedHex()));
     variables.insert(make_pair("$g_hex$", GetGreenHex()));
     variables.insert(make_pair("$b_hex$", GetBlueHex()));
+    variables.insert(make_pair("$a_hex$", GetAlphaHex()));
     variables.insert(make_pair("$h$", to_string(hue)));
     variables.insert(make_pair("$s$", to_string(saturation)));
     variables.insert(make_pair("$l$", to_string(lightness)));
