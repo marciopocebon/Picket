@@ -30,3 +30,4 @@ install: $(PROGRAM)
 	mkdir -p /etc/picket
 	cp $(GLADES) /etc/picket
 	cp $(PROGRAM) /usr/bin
+	cp resources/picket.desktop /usr/share/applications
