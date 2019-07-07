@@ -36,7 +36,6 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
     colorPickerBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_colorPickerButton_clicked) );
     clipboardBtn->signal_clicked().connect(sigc::mem_fun(this, &MainWindow::on_clipboardButton_clicked) );
     formatComboBox->signal_changed().connect(sigc::mem_fun(this, &MainWindow::on_format_changed));
-    this->signal_hide().connect(sigc::mem_fun(this, &MainWindow::on_hidden));
 
     set_title("Picket");
     set_size_request(100, 350);
@@ -172,13 +171,9 @@ void MainWindow::on_clipboardButton_clicked()
 
     auto Icon = Gio::ThemedIcon::create("color-picker");
     auto Notification = Gio::Notification::create(format);
-    Notification->set_body("Copied to clipboard.");
+    Notification->set_body(selectedFormat);
     Notification->set_icon (Icon);
     app->send_notification(Notification);
-}
-
-void MainWindow::on_hidden()
-{
 }
 
 void MainWindow::on_format_changed()

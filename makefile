@@ -1,5 +1,6 @@
 CXX ?= g++
 PROGRAM = picket
+DESKTOP = $(PROGRAM).desktop
 CXXFILES = $(wildcard src/*.cpp)
 OBJS = $(CXXFILES:.cpp=.o)
 CXXFLAGS = `pkg-config --cflags gtkmm-3.0`
@@ -10,7 +11,6 @@ GLADES_HOME = $(addprefix $(HOME)/.picket/,$(GLADES))
 all: $(PROGRAM)
 	mkdir -p $(HOME)/.picket
 	cp resources/formats $(HOME)/.picket
-	cp resources/config.ini $(HOME)/.picket
 
 %.o: %.cpp
 	$(CXX) $^ -o $@ -I $(*D) -c $(CXXFLAGS)
@@ -30,4 +30,10 @@ install: $(PROGRAM)
 	mkdir -p /etc/picket
 	cp $(GLADES) /etc/picket
 	cp $(PROGRAM) /usr/bin
-	cp resources/picket.desktop /usr/share/applications
+	cp resources/$(DESKTOP) /usr/share/applications
+
+.PHONY: uninstall
+uninstall: $(PROGRAM)
+	rm -fr /etc/$(PROGRAM)
+	rm -f /usr/bin/$(PROGRAM)
+	rm -f /usr/share/applications/$(DESKTOP)

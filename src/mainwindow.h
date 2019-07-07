@@ -49,7 +49,6 @@ class MainWindow : public Gtk::Window
     void PopulateComboWithFormats();
     void InitColorFormatManager();
 
-    void on_hidden();
     bool on_colorArea_draw(const Cairo::RefPtr<Cairo::Context>& cr);
     void on_exitButton_clicked();
     void on_settingsButton_clicked();

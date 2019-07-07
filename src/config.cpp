@@ -22,14 +22,6 @@ bool Config::LoadConfiguration()
         pixelSize = GetInteger("magnifier", "pixel_size", -1);
         pixelsPerRow = GetInteger("magnifier", "pixels_per_row", -1);
 
-        // cout << "Width: " << width << endl;
-        // cout << "Height: " << height << endl;
-        // cout << "CopyToClipboardAfterPick: " << copyToClipboardAfterPick << endl;
-        // cout << "QuitAfterPick: " << quitAfterPick << endl;
-        // cout << "LastFormat: " << lastFormat << endl;
-        // cout << "PixelSize: " << pixelSize << endl;
-        // cout << "PixelsPerRow: " << pixelsPerRow << endl;
-
         return true;
     }
 
