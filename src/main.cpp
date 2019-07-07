@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
     colorPickerWindow->SetMainWindow(window);
     colorPickerWindow->SetConfig(&config);
 
-    settingsWindow->SetMainWindow(window);
     settingsWindow->SetConfig(&config);
     window->SetSettingsWindow(settingsWindow);
 

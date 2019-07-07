@@ -17,11 +17,6 @@ SettingsWindow::SettingsWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
     refBuilder->get_widget("Pick3CheckBox", quitAfterPickCheckBox);
 }
 
-void SettingsWindow::SetMainWindow(MainWindow* _mainWindow)
-{
-    mainWindow = _mainWindow;
-}
-
 void SettingsWindow::SetConfig(Config* cfg)
 {
     config = cfg;

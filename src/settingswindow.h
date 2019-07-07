@@ -20,7 +20,6 @@ private:
 public:
     SettingsWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
-    void SetMainWindow(MainWindow* _mainWindow);
     void SetConfig(Config* cfg);
 
     void on_saveButton_clicked();
