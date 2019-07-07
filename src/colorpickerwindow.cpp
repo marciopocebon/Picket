@@ -190,11 +190,11 @@ bool ColorPickerWindow::on_key_pressed(GdkEventKey* event)
             device->warp(this->get_screen(),x+1,y);
             break;
         case GDK_KEY_e:
-        case GDK_KEY_plus:
+        case GDK_KEY_KP_Add:
             ChangePixelsPerRow(2);
             break;
         case GDK_KEY_q:
-        case GDK_KEY_minus:
+        case GDK_KEY_KP_Subtract:
             ChangePixelsPerRow(-2);
             break;
         case GDK_KEY_space:
