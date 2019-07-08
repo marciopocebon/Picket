@@ -7,13 +7,35 @@
 
 using namespace std;
 
-ColorFormatManager::ColorFormatManager()
+ColorFormatManager::ColorFormatManager(string path)
 {
+    this->filepath = path;
+    if(!FormatFileExists())
+        CreateFormatFile();
 }
 
-void ColorFormatManager::LoadFormats(string formatFile)
+bool ColorFormatManager::FormatFileExists()
 {
-    ifstream input(formatFile);
+    ifstream FILE(filepath);
+    if(!FILE)
+        return false;
+    else
+        return true;
+}
+
+bool ColorFormatManager::CreateFormatFile()
+{
+    ofstream fout;
+    fout.open(filepath);
+    fout<<formatsString<<endl;
+    fout.close();
+
+    return true;
+}
+
+void ColorFormatManager::LoadFormats()
+{
+    ifstream input(filepath);
     for( std::string line; getline( input, line ); )
     {
         if(line.size() == 0)

@@ -10,6 +10,8 @@
 class ColorPickerWindow;
 class SettingsWindow;
 
+using namespace std;
+
 class MainWindow : public Gtk::Window
 {
     private:
@@ -19,6 +21,7 @@ class MainWindow : public Gtk::Window
     SettingsWindow *settingsWindow;
     void LoadConfiguration();
     void SaveConfiguration();
+    ColorFormatManager colorFormatManager = ColorFormatManager((string)getenv("HOME")+"/.picket/formats");
 
     protected:
     Glib::RefPtr<Gtk::Application> app;
@@ -34,7 +37,6 @@ class MainWindow : public Gtk::Window
     Gtk::Scale *alphaScale;
     Gtk::Label *hexColorLabel;
     Gtk::ComboBoxText *formatComboBox;
-    ColorFormatManager colorFormatManager;
 
     public:
     MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);

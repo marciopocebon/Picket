@@ -93,8 +93,7 @@ void MainWindow::SyncColorWithScales()
 
 void MainWindow::InitColorFormatManager()
 {
-    colorFormatManager = ColorFormatManager();
-    colorFormatManager.LoadFormats((string)getenv("HOME")+"/.picket/formats");
+    colorFormatManager.LoadFormats();
 }
 
 void MainWindow::PopulateComboWithFormats()
