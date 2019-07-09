@@ -1,5 +1,7 @@
 # Picket
 
+![MainWindow](/resources/MainWindow.png)
+
 Color picker written in c++ using gtkmm
 
 ## Getting Started
