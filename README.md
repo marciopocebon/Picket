@@ -6,11 +6,15 @@ Screen color picker for linux with magnifier and custom/user defined formats.
 
 ## Features
 
-* Magnifier
-* Pixel precision selection
-* Custom color format output
-* Multiple variables for format output creation
-* Usefull settings like start immediate pick and quit after pick
+* [Magnifier](#Magnifier): Zoom in on particular pixels
+* [Precision](#Precision)Pixel precision selection
+* [CustomFormat](#CustomFormat)Custom color format output
+* [Variables](#Variables)Multiple variables for format output creation
+* [Settings](#Settings)Usefull settings like start immediate pick and quit after pick
+
+### Magnifier
+
+![Magnifier](/resources/Magnifier.gif)
 
 ## Install
 
