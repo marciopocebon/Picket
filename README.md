@@ -23,6 +23,7 @@ Execute `make` to build the program and `sudo make install` to install it on you
 ## Built With
 
 * [INIH](https://github.com/benhoyt/inih) - inih simple INI file parser
+* [GLADE](https://glade.gnome.org/) - Glade user interface designer
 
 ## Authors
 
