@@ -5,7 +5,6 @@
 #include "colorpickerwindow.h"
 #include "color.h"
 #include "config.h"
-#include "INIReader.h"
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject)
 {
