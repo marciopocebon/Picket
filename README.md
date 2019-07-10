@@ -2,9 +2,17 @@
 
 ![MainWindow](/resources/MainWindow.png)
 
-Color picker written in c++ using gtkmm
+Screen color picker for linux with magnifier and custom/user defined formats.
 
-## INSTALL
+## Features
+
+* Magnifier
+* Pixel precision selection
+* Custom color format output
+* Multiple variables for format output creation
+* Usefull settings like start immediate pick and quit after pick
+
+## Install
 
 Clone the repository to your local machine.
 Execute `make` to build the program and `sudo make install` to install it on your machine.
