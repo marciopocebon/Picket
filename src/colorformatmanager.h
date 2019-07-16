@@ -17,15 +17,17 @@ class ColorFormatManager
     string ReplaceVariable(string original, string var, string replacement);
     vector<string> GetVariableKeys();
     string formatsString = "#FORMATS\n"
-    "[RGB]Color($r$, $g$, $b$);\n"
-    "[RGBA]Color($r$, $g$, $b$, $a$);\n"
-    "# This is a comment\n"
-    "[RGB_1.0]Color($r_d$, $g_d3$, $b_d4$);\n"
-    "[RGBA_1.0]Color($r_d5$, $g_d6$, $b_d5$, $a_d4$);\n"
-    "----\n"
-    "[HSL]Color($h$, $s$, $l$);\n"
-    "# Hex color value\n"
-    "[HEX]#$r_hex$$g_hex$$b_hex$\n";
+        "# Formats\n"
+        "[HEX]#$r_hex$$g_hex$$b_hex$\n"
+        "[RGB]$r$, $g$, $b$\n"
+        "[HSL]$h$, $s$%, $l$%\n"
+        "# CSS Formats\n"
+        "[CSS HEX]#$r_hex$$g_hex$$b_hex$\n"
+        "[CSS RGB]rgb($r$, $g$, $b$)\n"
+        "[CSS HSL]hsl($h$, $s$%, $l$%)\n"
+        "# .Net Formats\n"
+        "[.Net Color]Color.FromRgb($r$, $g$, $b$)"
+        "# This is a comment\n";
 
  protected:
 
