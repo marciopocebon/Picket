@@ -18,12 +18,12 @@ Screen color picker for linux with magnifier and custom/user defined formats.
 
 ### Custom Format
 
-All the formats are stored in the directory {home}/.picket in the file formats.txt
-Lines that do not start with a `[` character are ignored and can be used like comments
-Color Formats consist of two components:
-1. [xxxx] - A unique indetifier
-2. xxxxxx... - The actual string that will be copied to the clipboard
-Example
+All the formats are stored in the directory {home}/.picket in the file formats.txt  
+Lines that do not start with a `[` character are ignored and can be used like comments  
+Color Formats consist of two components:  
+1. [xxxx] - A unique indetifier  
+2. xxxxxx... - The actual string that will be copied to the clipboard  
+Example  
 > [RGB]$r$, $g$, $b$
 
 ### Variables
