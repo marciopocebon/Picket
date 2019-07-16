@@ -38,6 +38,7 @@ picket
 
 #Glade backupfiles
 *.glade~
+*.glade#
 
 .vscode
 todo.org

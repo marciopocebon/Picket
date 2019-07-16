@@ -16,6 +16,36 @@ Screen color picker for linux with magnifier and custom/user defined formats.
 
 ![Magnifier](/resources/Magnifier.gif)
 
+### Custom Format
+
+All the formats are stored in the directory {home}/.picket in the file formats.txt
+Lines that do not start with a `[` character are ignored and can be used like comments
+Color Formats consist of two components:
+1. [xxxx] - A unique indetifier
+2. xxxxxx... - The actual string that will be copied to the clipboard
+Example
+> [RGB]$r$, $g$, $b$
+
+### Variables
+
+* $r$ - Red 0-255
+* $g$ - Green 0-255
+* $b$ - Blue 0-255
+* $a$ - Aplha 0-255
+* $r_d$ - Red as dougle 0.0 - 1.0
+* $g_d$ - Green as dougle 0.0 - 1.0
+* $b_d$ - Blue as dougle 0.0 - 1.0
+* $a_d$ - Alpha as dougle 0.0 - 1.0
+* $r_hex$ - Red as hex 00 - FF
+* $g_hex$ - Green as hex 00 - FF
+* $b_hex$ - Blue as hex 00 - FF
+* $a_hex$ - Alpha as hex 00 - FF
+* $h$ - Hue
+* $s$ - Saturation
+* $l$ - Lightness
+* $s_d$ - Saturation as double
+* $l_d$ - Lightness as double
+
 ## Install
 
 Clone the repository to your local machine.
