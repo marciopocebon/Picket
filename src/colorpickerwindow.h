@@ -14,8 +14,8 @@ private:
     int screenHeight = 0;
     int x = 0;
     int y = 0;
-    int xn = 0;
-    int yn = 0;
+    int magnifierX = 0;
+    int magnifierY = 0;
 
     Color color;
     Config* config;
@@ -24,11 +24,13 @@ private:
     int maxPixelSize = 15;
     int pixelSize = 8;
     int minPixelsPerRow = 1;
-    int maxPixelsPerRow = 31;
+    int maxPixelsPerRow = 49;
     int pixelsPerRow = 13;
+    int outterBounds = 50;
     int magnifierSize = pixelSize*pixelsPerRow;
 
-    void TranslateToInnerBounds();
+    int halfMagnifierWidth() { return (pixelsPerRow-1)/2; };
+
     void ChangePixelsPerRow(int change);
     void ChangePixelSize(int change);
     void CalculateMagnifierSize();

@@ -53,14 +53,14 @@ void ColorPickerWindow::on_showed()
     auto root = Gdk::Window::get_default_root_window();
     screenWidth = root->get_width();
     screenHeight = root->get_height();
-    screenshot = Gdk::Pixbuf::create(root, 0, 0, screenWidth, screenHeight);
+    screenshot = Gdk::Pixbuf::create(root, -outterBounds, -outterBounds, screenWidth+outterBounds*2, screenHeight+outterBounds*2);
 
-      // Grab and hide cursor
+    // Grab and hide cursor
     this->set_modal(true);
     auto display = this->get_display();
     auto window = this->get_window();
     auto screen = this->get_screen();
-    auto grabSuccess = display->get_default_seat()->grab(window, Gdk::SEAT_CAPABILITY_ALL, true  ,Gdk::Cursor::create(display, Gdk::BLANK_CURSOR));
+    auto grabSuccess = display->get_default_seat()->grab(window, Gdk::SEAT_CAPABILITY_ALL, true, Gdk::Cursor::create(display, Gdk::BLANK_CURSOR));
 
     // set initial X and Y
     auto device = display->get_default_seat()->get_pointer();
@@ -71,50 +71,32 @@ void ColorPickerWindow::on_showed()
     y = initialY;
 }
 
-void ColorPickerWindow::TranslateToInnerBounds()
+bool ColorPickerWindow::on_my_motion_notify_event(GdkEventMotion* motion_event)
 {
-    auto xMinInner = pixelsPerRow/2;
-    auto xMaxInner = screenWidth - pixelsPerRow;
+    x = motion_event->x_root;
+    y = motion_event->y_root;
 
-    if(x > xMinInner && x < xMaxInner)
-        xn = x-pixelsPerRow/2;
-    else if(x < xMinInner)
-        xn = xMinInner;
-    else if(x > xMaxInner)
-        xn = xMaxInner;
+    GetPixelFromPixbuf(x+outterBounds, y+outterBounds, screenshot, screenshot->get_pixels());
+    Redraw();
 
-    auto yMinInner = pixelsPerRow/2;
-    auto yMaxInner = screenHeight - pixelsPerRow;
-
-    if(y > yMinInner && y < yMaxInner)
-        yn = y-pixelsPerRow/2;
-    else if(y < yMinInner)
-        yn = yMinInner;
-    else if(y > yMaxInner)
-        yn = yMaxInner;
+    return true;
 }
 
 bool ColorPickerWindow::on_my_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
     // fill with screenshot
-    Gdk::Cairo::set_source_pixbuf(cr, screenshot, 0, 0);
+    Gdk::Cairo::set_source_pixbuf(cr, screenshot, -outterBounds, -outterBounds);
     cr->paint();
 
-    TranslateToInnerBounds();
-
     // draw magnifier
-    Glib::RefPtr<Gdk::Pixbuf> subImage =  Gdk::Pixbuf::create_subpixbuf(screenshot, xn, yn, pixelsPerRow, pixelsPerRow);
+    Glib::RefPtr<Gdk::Pixbuf> subImage =  Gdk::Pixbuf::create_subpixbuf(screenshot, x+outterBounds-pixelsPerRow/2, y+outterBounds-pixelsPerRow/2, pixelsPerRow, pixelsPerRow);
     Glib::RefPtr<Gdk::Pixbuf> scaledImage = subImage->scale_simple(magnifierSize, magnifierSize, Gdk::INTERP_NEAREST);
+
     Gdk::Cairo::set_source_pixbuf(cr, scaledImage, x-magnifierSize/2, y-magnifierSize/2);
     cr->rectangle(x-magnifierSize/2,y-magnifierSize/2,magnifierSize,magnifierSize);
     cr->fill();
 
     // draw outline
-    cr->set_line_width(1);
-    cr->set_source_rgba(0.3,0.3,0.3,1);
-    cr->rectangle(x-magnifierSize/2-1,y-magnifierSize/2-1,magnifierSize+2,magnifierSize+2);
-    cr->stroke();
-
     cr->set_line_width(2);
     cr->set_source_rgba(1,1,1,1);
     cr->rectangle(x-magnifierSize/2,y-magnifierSize/2,magnifierSize,magnifierSize);
@@ -135,7 +117,7 @@ bool ColorPickerWindow::on_my_draw(const Cairo::RefPtr<Cairo::Context>& cr)
     cr->rectangle(x-pixelSize/2,y-pixelSize/2,pixelSize,pixelSize);
     cr->fill();
 
-    // draw color text
+    // Get TextExtents
     Cairo::TextExtents extents;
     cr->select_font_face("Monospace", Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_BOLD);
     cr->set_font_size(25);
@@ -146,21 +128,17 @@ bool ColorPickerWindow::on_my_draw(const Cairo::RefPtr<Cairo::Context>& cr)
     cr->rectangle(x-extents.width/2-25,y+magnifierSize/2+25,extents.width+50,extents.height+15);
     cr->fill();
 
+    // draw color text
     auto contrastColor = color.GetContrastColor();
     cr->set_source_rgba(contrastColor.GetRedAsDouble(),contrastColor.GetGreenAsDouble(),contrastColor.GetBlueAsDouble(),1);
     cr->move_to(x-extents.width/2,y+magnifierSize/2+50);
     cr->show_text(color.GetHexString());
 
-    return true;
-}
-
-bool ColorPickerWindow::on_my_motion_notify_event(GdkEventMotion* motion_event)
-{
-    x = motion_event->x_root;
-    y = motion_event->y_root;
-
-    GetPixelFromPixbuf(x, y, screenshot, screenshot->get_pixels());
-    Redraw();
+    // Draw outline for color info
+    cr->set_line_width(2);
+    cr->set_source_rgba(1,1,1,1);
+    cr->rectangle(x-extents.width/2-25-1,y+magnifierSize/2+25-1,extents.width+50+1,extents.height+15+1);
+    cr->stroke();
 
     return true;
 }
