@@ -4,7 +4,9 @@ DESKTOP  = $(PROGRAM).desktop
 ICON     = $(PROGRAM).svg
 CXXFILES = $(wildcard src/*.cpp)
 OBJS     = $(CXXFILES:.cpp=.o)
-CXXFLAGS = `pkg-config --cflags gtkmm-3.0`
+CXXFLAGS := `pkg-config --cflags gtkmm-3.0` \
+	-Wall -Wextra -Wconversion -fPIE -Wno-unused-parameter -Wformat=2 \
+	-Wformat-security -fstack-protector-all -Wstrict-overflow
 LIBS     = `pkg-config --libs gtkmm-3.0`
 GLADES   = $(wildcard ui/*.glade)
 PREFIX   = /usr
